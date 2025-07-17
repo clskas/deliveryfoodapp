@@ -1,6 +1,6 @@
 import 'package:deliveryfood/components/my_button.dart';
 import 'package:deliveryfood/components/my_textfield.dart';
-import 'package:deliveryfood/pages/home_page.dart';
+import 'package:deliveryfood/services/auth/auth_service.dart';
 //import 'package:deliveryfood/main.dart';
 import 'package:flutter/material.dart';
 
@@ -17,17 +17,35 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController passwordController = TextEditingController();
 
   //login method
-  void login() {
-    /*
-    
-    fill out authentification
-    
-    */
+  void login() async {
+    //get instance of auth service
+    final authService = AuthService();
 
-    // navigator to home page
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const HomePage()),
+    //try sign in
+    try {
+      await authService.signInWithEmailPassword(
+        emailController.text,
+        passwordController.text,
+      );
+    }
+    //display any errors
+    catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(title: Text(e.toString())),
+      );
+    }
+
+   
+  }
+
+  void forgotPw() {
+    showDialog(
+      context: context,
+
+      builder: (context) =>
+          AlertDialog(backgroundColor: Theme.of(context).colorScheme.surface,
+          title: Text("User tapped forgot password"),),
     );
   }
 
